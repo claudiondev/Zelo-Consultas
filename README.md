@@ -142,4 +142,4 @@ Dados de saúde mental são dados sensíveis (LGPD). Este repositório **não co
 
 ---
 
-Desenvolvido por **Claudio Nascimento** · [github.com/claudiondev](https://github.com/claudiondev)
+Licença [MIT](LICENSE) · Desenvolvido por **Claudio Nascimento** · [github.com/claudiondev](https://github.com/claudiondev)
