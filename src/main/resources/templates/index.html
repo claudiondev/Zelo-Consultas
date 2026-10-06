@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Inicio')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: cabecalho}"></div>
+<div class="pagina-escolha">
+    <main class="escolha-principal">
+        <div class="saudacao">
+            <h1 th:text="'Ola, Dra. ' + ${@prontuarioProperties.medica.primeiroNome}">Ola, Dra. Ana</h1>
+            <p>Selecione o modulo para continuar</p>
+        </div>
+
+        <div class="modulo-cards">
+            <a class="modulo-card" th:href="@{/consultas}">
+                <div class="modulo-card-faixa"></div>
+                <div class="modulo-card-corpo">
+                    <span class="modulo-icone">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                            <rect x="5" y="4" width="14" height="17" rx="2"></rect>
+                            <rect x="9" y="2" width="6" height="4" rx="1"></rect>
+                            <line x1="8" y1="10.5" x2="16" y2="10.5"></line>
+                            <line x1="8" y1="13.5" x2="16" y2="13.5"></line>
+                            <line x1="8" y1="16.5" x2="13" y2="16.5"></line>
+                        </svg>
+                    </span>
+                    <h2>Consultas</h2>
+                    <p>Atendimento ambulatorial. Prontuarios, evolucoes clinicas, prescricoes e retornos.</p>
+                    <span class="modulo-card-botao">Acessar</span>
+                </div>
+            </a>
+
+            <a class="modulo-card" th:href="@{/internos}">
+                <div class="modulo-card-faixa"></div>
+                <div class="modulo-card-corpo">
+                    <span class="modulo-icone">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                            <path d="M3 19v-7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v7"></path>
+                            <path d="M3 15h18"></path>
+                            <rect x="5" y="9" width="5" height="4" rx="1"></rect>
+                            <path d="M3 19v2"></path>
+                            <path d="M21 19v2"></path>
+                        </svg>
+                    </span>
+                    <h2>Internamentos</h2>
+                    <p>Gestao de pacientes internados. Acompanhamento diario, evolucao hospitalar e alta medica.</p>
+                    <span class="modulo-card-botao">Acessar</span>
+                </div>
+            </a>
+        </div>
+
+        <p class="escolha-info">Sistema local &middot; Dados protegidos conforme LGPD &middot; Backup automatico</p>
+    </main>
+
+    <footer class="rodape-simples">
+        <span>&copy; 2026 &middot; Desenvolvido por Claudio Nascimento</span>
+        <form th:action="@{/logout}" method="post" style="display:inline;">
+            <button type="submit">Sair do sistema</button>
+        </form>
+    </footer>
+</div>
+</body>
+</html>

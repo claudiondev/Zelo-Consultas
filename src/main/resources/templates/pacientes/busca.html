@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Pacientes')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: cabecalho}"></div>
+<main class="container">
+    <h1>Pacientes</h1>
+    <p class="subtitulo">Todos os pacientes cadastrados. Filtre por nome ou CPF pra achar mais rapido.</p>
+
+    <form th:action="@{/pacientes/busca}" method="get" class="cartao">
+        <div class="campo">
+            <label for="termo">Nome ou CPF</label>
+            <input type="text" id="termo" name="termo" th:value="${termo}" placeholder="Deixe em branco pra ver todos">
+        </div>
+        <button type="submit">Filtrar</button>
+    </form>
+
+    <p class="vazio" th:if="${#lists.isEmpty(resultados) and (termo == null or #strings.isEmpty(termo))}">
+        Nenhum paciente cadastrado ainda. Registre uma consulta pra começar.
+    </p>
+    <p class="vazio" th:if="${#lists.isEmpty(resultados) and termo != null and !#strings.isEmpty(termo)}">
+        Nenhum paciente encontrado pra "<span th:text="${termo}"></span>".
+    </p>
+
+    <table th:if="${!#lists.isEmpty(resultados)}">
+        <thead>
+        <tr><th>Nome</th><th>CPF</th><th>Nascimento</th><th></th></tr>
+        </thead>
+        <tbody>
+        <tr th:each="paciente : ${resultados}">
+            <td th:text="${paciente.nome}">Nome</td>
+            <td th:text="${paciente.cpf} ?: '-'">CPF</td>
+            <td th:text="${#temporals.format(paciente.dataNascimento, 'dd/MM/yyyy')}">-</td>
+            <td><a th:href="@{/pacientes/{id}/historico(id=${paciente.id})}">Ver histórico</a></td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+</body>
+</html>

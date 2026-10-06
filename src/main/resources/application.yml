@@ -1,0 +1,70 @@
+spring:
+  application:
+    name: zelo-consultas
+
+  datasource:
+    url: jdbc:h2:file:./data/prontuario;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ""
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+
+  thymeleaf:
+    cache: false
+
+  h2:
+    console:
+      # Desligado por padrão: expõe o banco via navegador e não deve ir pro pacote final da médica.
+      # Ligado apenas no profile "dev" (application-dev.yml) durante o desenvolvimento.
+      enabled: false
+
+server:
+  port: 8080
+  # Liga so no proprio computador (loopback). Sem isto, o Tomcat escuta em
+  # todas as interfaces (0.0.0.0) e qualquer dispositivo na mesma rede acessaria
+  # o prontuario sem login. App e local/single-user, entao nunca deve ser
+  # alcancavel pela rede.
+  address: 127.0.0.1
+
+prontuario:
+  # Nome comercial exibido pro usuario (titulo de pagina, cabecalho, bandeja).
+  nome-app: "Zelo"
+
+  # Trava de PIN simples pra abrir o sistema — usuario/senha fixos, sem
+  # cadastro de conta (app local de uso unico da médica).
+  # A senha NAO fica aqui (repositorio e versionado): defina a variavel de
+  # ambiente PRONTUARIO_LOGIN_SENHA (ou -Dprontuario.login.senha=... na hora
+  # de rodar/empacotar). Sem isso, o app se recusa a subir (ver SecurityConfig).
+  login:
+    usuario: "ADMIN"
+
+  backup:
+    diretorio: ./backups
+    maximo-copias-locais: 30
+    maximo-copias-pendrive: 8
+    lembrete-dias: 7
+
+  # Dados fixos que entram no timbre e na assinatura do atestado (PDF).
+  # Em configuracao, nao hardcoded no Java, pra ela ajustar sem recompilar.
+  clinica:
+    nome: "CLÍNICA MODELO"
+    razao-social: "CLÍNICA MODELO DEMONSTRATIVA LTDA."
+    endereco: "RUA EXEMPLO, 123 – CENTRO - CIDADE - UF"
+    complemento: "CEP 00000-000 - FONE (00) 0000-0000 - E-MAIL: contato@exemplo.com"
+    cidade: "Cidade-UF"
+  medica:
+    nome: "Ana Ribeiro"
+    titulo: "Médica"
+    especialidade: "Médica Psiquiatra"
+    crm: "CRM-UF: 0000"
+    # RQE (Registro de Qualificação de Especialista) — aparece no receituario
+    # de controle especial. Ainda nao confirmado com ela; preencher quando
+    # ela informar (ex.: "RQE 1234"). Vazio = a linha some do PDF.
+    rqe: ""

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Copia de seguranca')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: cabecalho}"></div>
+<main class="container">
+    <h1>Cópia de segurança</h1>
+    <p class="subtitulo">O sistema já faz uma cópia automática no computador a cada consulta salva. Aqui você grava uma cópia extra no pendrive, pra guardar fora da máquina.</p>
+
+    <div class="alerta sucesso" th:if="${mensagem}" th:text="${mensagem}"></div>
+    <div class="alerta erro" th:if="${erro}" th:text="${erro}"></div>
+
+    <div class="alerta aviso" th:if="${dias == null}">
+        Ainda não há registro de cópia no pendrive. Assim que possível, plugue o pendrive e grave a primeira.
+    </div>
+    <div class="alerta aviso" th:if="${dias != null}" th:text="'Última cópia no pendrive: há ' + ${dias} + ' dia(s).'"></div>
+
+    <div class="cartao">
+        <h2>Pendrives detectados</h2>
+        <p class="vazio" th:if="${#lists.isEmpty(drives)}">
+            Nenhum pendrive detectado. Plugue o pendrive e atualize esta página.
+        </p>
+        <div th:each="drive : ${drives}" class="candidato">
+            <span th:text="${drive}">E:\</span>
+            <form th:action="@{/backup/pendrive}" method="post">
+                <input type="hidden" name="destino" th:value="${drive}">
+                <button type="submit">Gravar cópia aqui</button>
+            </form>
+        </div>
+    </div>
+
+    <a class="botao secundario" th:href="@{/}">Voltar ao início</a>
+</main>
+</body>
+</html>

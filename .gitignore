@@ -1,0 +1,35 @@
+# Dados de paciente e backups nunca vao pro repositorio
+data/
+data-demo/
+*.mv.db
+*.trace.db
+backups/
+
+# Qualquer coisa em referencia/ e material de apoio com dado real de paciente
+# (fotos, docs, prints enviados pela clinica para adaptar o layout) —
+# bloqueado por padrao/categoria, nao por nome exato, pra nao vazar o proximo
+# arquivo que chegar com nome diferente. So os .md de estrutura (anonimizados,
+# sem dado de paciente) sao versionados.
+referencia/*
+!referencia/*.md
+
+# Orientacao interna do Claude Code para este projeto - nao publicar
+CLAUDE.md
+
+# Build
+target/
+*.class
+
+# IDE
+.idea/
+*.iml
+.vscode/
+.settings/
+.classpath
+.project
+
+# Maven wrapper (binario baixado, nao versionar)
+.mvn/wrapper/maven-wrapper.jar
+
+# OS
+.DS_Store

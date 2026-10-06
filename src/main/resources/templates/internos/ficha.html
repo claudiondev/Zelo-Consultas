@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Ficha do interno')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: cabecalho}"></div>
+<main class="container">
+    <a class="voltar" th:href="@{/internos}">&larr; Internos</a>
+
+    <div class="alerta sucesso" th:if="${mensagem}" th:text="${mensagem}"></div>
+
+    <h1 th:text="${interno.nome}">Nome</h1>
+    <p class="subtitulo">
+        Nascimento: <span th:text="${#temporals.format(interno.dataNascimento, 'dd/MM/yyyy')}">-</span>
+    </p>
+
+    <div class="botoes">
+        <a class="botao secundario" th:href="@{/internos/{id}/receituario(id=${interno.id})}">Gerar receituário</a>
+        <a class="botao secundario" th:href="@{/internos/{id}/esquema-terapeutico(id=${interno.id})}">Gerar esquema terapêutico</a>
+    </div>
+
+    <div class="cartao">
+        <h2>Nova anotacao</h2>
+        <form th:action="@{/internos/{id}/notas(id=${interno.id})}" th:object="${comando}" method="post" novalidate>
+            <div class="campo" th:classappend="${#fields.hasErrors('data')} ? 'invalido'">
+                <label for="n-data">Data *</label>
+                <input type="date" id="n-data" th:field="*{data}">
+                <div class="erro-campo" th:if="${#fields.hasErrors('data')}" th:errors="*{data}"></div>
+            </div>
+            <div class="campo" th:classappend="${#fields.hasErrors('anotacao')} ? 'invalido'">
+                <label for="n-anotacao">Anotacao *</label>
+                <textarea id="n-anotacao" th:field="*{anotacao}"></textarea>
+                <div class="erro-campo" th:if="${#fields.hasErrors('anotacao')}" th:errors="*{anotacao}"></div>
+            </div>
+            <button type="submit">Salvar anotacao</button>
+        </form>
+    </div>
+
+    <h2 style="margin-top:32px;">Anotacoes anteriores</h2>
+    <p class="vazio" th:if="${#lists.isEmpty(notas)}">Nenhuma anotacao registrada ainda.</p>
+
+    <div class="cartao" th:each="nota : ${notas}">
+        <span class="eyebrow" th:text="${#temporals.format(nota.data, 'dd/MM/yyyy')}">Data</span>
+        <p th:text="${nota.anotacao}">Anotacao</p>
+    </div>
+</main>
+</body>
+</html>

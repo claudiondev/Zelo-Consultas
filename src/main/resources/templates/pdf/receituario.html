@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <style>
+        @page { size: A4; margin: 1.2cm; }
+        body { font-family: Helvetica, Arial, sans-serif; font-size: 10pt; color: #000; }
+
+        .folha { border: 1px solid #000; padding: 14px 18px; }
+        .quebra-pagina { page-break-after: always; }
+
+        .titulo-receita { text-align: center; font-weight: bold; font-size: 14pt; margin-bottom: 16px; }
+
+        .barra-secao {
+            border-top: 1px solid #000;
+            border-bottom: 1px solid #000;
+            text-align: center;
+            font-weight: bold;
+            font-size: 9pt;
+            padding: 3px 0;
+            margin-top: 16px;
+        }
+
+        .bloco-emitente { min-height: 80px; padding: 10px 4px; text-align: center; }
+        .emitente-nome { font-weight: bold; font-size: 11.5pt; }
+        .emitente-info { font-size: 8.5pt; margin-top: 2px; }
+
+        .bloco-paciente { padding: 8px 2px; }
+        .bloco-paciente .linha { margin-top: 8px; }
+
+        .bloco-prescricao { min-height: 170px; padding: 10px 4px; white-space: pre-wrap; line-height: 1.6; }
+
+        .caixa-assinatura { border: 1px solid #000; padding: 8px 10px; margin-top: 16px; }
+        .caixa-assinatura .campo { margin-top: 6px; }
+        .caixa-assinatura .rotulo { font-weight: bold; }
+        .espaco-assinatura { border-top: 1px solid #000; width: 220px; margin: 26px 0 4px; }
+
+        .bloco-comprador { padding: 8px 2px; }
+        .bloco-comprador .linha { margin-top: 8px; }
+        .comprador-cidade-uf { display: table; width: 100%; margin-top: 8px; }
+        .comprador-cidade-uf .celula { display: table-cell; }
+        .comprador-cidade-uf .celula-uf { width: 30%; }
+
+        .rodape-vias { text-align: right; font-style: italic; font-size: 8pt; margin-top: 12px; }
+    </style>
+</head>
+<body>
+<th:block th:each="via : ${ {1, 2} }">
+<div class="folha" th:classappend="${via == 1} ? 'quebra-pagina' : ''">
+    <div class="titulo-receita">RECEITA DE CONTROLE ESPECIAL</div>
+
+    <div class="barra-secao">IDENTIFICAÇÃO DO EMITENTE</div>
+    <div class="bloco-emitente">
+        <div class="emitente-nome" th:text="${clinica.razaoSocial}">RAZAO SOCIAL</div>
+        <div class="emitente-info" th:text="${clinica.endereco}">endereco</div>
+        <div class="emitente-info" th:text="${clinica.complemento}">complemento</div>
+    </div>
+
+    <div class="barra-secao">IDENTIFICAÇÃO DO PACIENTE</div>
+    <div class="bloco-paciente">
+        <div class="linha">NOME COMPLETO: <span th:text="${pacienteNome}">Nome do paciente</span></div>
+        <div class="linha">ENDEREÇO COMPLETO: <span th:text="${pacienteEndereco}">Endereco</span></div>
+        <div class="linha">CPF ou, se estrangeiro, PASSAPORTE Nº: <span th:text="${pacienteCpf}">CPF</span></div>
+    </div>
+
+    <div class="barra-secao">PRESCRIÇÃO</div>
+    <div class="bloco-prescricao">
+        <div th:text="${viaUso}">USO ORAL</div>
+        <div th:text="${prescricao}">Medicacao e posologia.</div>
+    </div>
+
+    <div class="caixa-assinatura">
+        <div class="campo"><span class="rotulo">DATA:</span> <span th:text="${cidade} + ', ' + ${dataExtenso} + '.'">Cidade, data.</span></div>
+        <div class="campo">
+            <span class="rotulo">IDENTIFICAÇÃO E ASSINATURA DO PRESCRITOR:</span>
+            <div class="espaco-assinatura"></div>
+            <div>
+                <span th:text="${medica.nome}">Nome da medica</span> —
+                <span th:text="${medica.titulo}">Titulo</span> —
+                <span th:text="${medica.crm}">CRM</span>
+                <span th:if="${medica.rqe != null and !medica.rqe.isBlank()}" th:text="' — RQE Nº: ' + ${medica.rqe}">RQE</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="barra-secao">IDENTIFICAÇÃO DO COMPRADOR</div>
+    <div class="bloco-comprador">
+        <div class="linha">NOME COMPLETO:</div>
+        <div class="linha">CPF ou, se estrangeiro, PASSAPORTE Nº:</div>
+        <div class="linha">ENDEREÇO COMPLETO:</div>
+        <div class="comprador-cidade-uf">
+            <div class="celula">CIDADE:</div>
+            <div class="celula celula-uf">UF:</div>
+        </div>
+        <div class="linha">TELEFONE:</div>
+    </div>
+
+    <div class="rodape-vias">1ª via - Retenção pela Farmácia / 2ª via - Paciente</div>
+</div>
+</th:block>
+</body>
+</html>

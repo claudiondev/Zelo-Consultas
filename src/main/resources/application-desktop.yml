@@ -1,0 +1,5 @@
+# Perfil do app empacotado (jpackage) para a médica. Ativado com
+# --spring.profiles.active=desktop no atalho gerado.
+prontuario:
+  launcher:
+    enabled: true

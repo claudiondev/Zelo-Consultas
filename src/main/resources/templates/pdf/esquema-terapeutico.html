@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <style>
+        /* openhtmltopdf nao suporta flexbox — layout lado-a-lado aqui usa
+           float (cabecalho/rodape) e display:table-cell (icone + tabela). */
+        @page { size: A4 landscape; margin: 1cm; }
+        body { font-family: Helvetica, Arial, sans-serif; font-size: 11pt; color: #000; }
+
+        /* Moldura decorativa igual ao talao real (linhas rosa/salmao em
+           volta de toda a folha). */
+        .moldura { border: 3px double #E8798A; padding: 6px; }
+        .moldura-interna { border: 3px double #E8798A; padding: 22px 30px; }
+
+        .cabecalho { display: table; width: 100%; margin-bottom: 28px; }
+        .clinica-nome {
+            display: table-cell;
+            text-align: left;
+            font-family: "Times New Roman", Georgia, serif;
+            font-size: 22pt;
+            font-weight: bold;
+            color: #4E7A4E;
+            letter-spacing: 1px;
+        }
+        .titulo {
+            display: table-cell;
+            text-align: right;
+            font-family: Helvetica, Arial, sans-serif;
+            font-size: 24pt;
+            font-weight: bold;
+            color: #4A5FA8;
+            letter-spacing: 0.5px;
+        }
+
+        .tabela-wrap { display: table; width: 100%; table-layout: fixed; }
+        .icone { display: table-cell; width: 34px; vertical-align: top; padding-top: 6px; font-size: 20pt; font-weight: bold; color: #4E7A4E; text-align: center; }
+        .tabela-celula { display: table-cell; }
+
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #444; padding: 8px 10px; text-align: left; vertical-align: top; }
+        th { font-size: 11pt; font-style: italic; }
+        th:not(:first-child), td:not(:first-child) { text-align: center; width: 16%; }
+
+        .rodape { overflow: hidden; margin-top: 34px; font-size: 12pt; }
+        .rodape-nome { float: left; width: 65%; }
+        .rodape-nome .nome-linha { border-bottom: 1px solid #000; padding-left: 6px; }
+        .rodape-data { float: right; }
+    </style>
+</head>
+<body>
+<div class="moldura">
+<div class="moldura-interna">
+
+    <div class="cabecalho">
+        <div class="clinica-nome" th:text="${clinica.nome}">CLINICA</div>
+        <div class="titulo">ESQUEMA TERAPÊUTICO</div>
+    </div>
+
+    <div class="tabela-wrap">
+        <div class="icone">+</div>
+        <div class="tabela-celula">
+            <table>
+                <thead>
+                <tr>
+                    <th>Nome do Medicamento</th>
+                    <th>Manhã<br/>8:00</th>
+                    <th>Tarde<br/>14:00</th>
+                    <th>Noite<br/>20:00</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="linha : ${linhas}">
+                    <td th:text="${linha.nomeMedicamento}">Medicamento</td>
+                    <td th:text="${linha.manha}"></td>
+                    <td th:text="${linha.tarde}"></td>
+                    <td th:text="${linha.noite}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="rodape">
+        <div class="rodape-nome">
+            Nome:
+            <span class="nome-linha" th:text="${pacienteNome}"></span>
+        </div>
+        <div class="rodape-data">
+            DATA:&#160;<span th:text="${dataFormatada}">00/00/0000</span>
+        </div>
+    </div>
+
+</div>
+</div>
+</body>
+</html>

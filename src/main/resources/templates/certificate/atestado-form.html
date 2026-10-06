@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Atestado')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: cabecalho}"></div>
+<main class="container">
+    <a class="voltar" th:href="${voltarUrl}">&larr; <span th:text="${pacienteNome}">Paciente</span></a>
+
+    <h1>Gerar atestado</h1>
+    <p class="subtitulo" th:text="'Paciente: ' + ${pacienteNome}">Paciente</p>
+    <div class="alerta aviso">Confira o texto e a data. O timbre da clinica e a assinatura ja entram no PDF.</div>
+
+    <form class="form-gera-pdf" th:action="${acaoUrl}" th:object="${comando}" method="post" novalidate>
+        <div class="campo" th:classappend="${#fields.hasErrors('texto')} ? 'invalido'">
+            <label for="texto">Texto do atestado</label>
+            <textarea id="texto" th:field="*{texto}" style="min-height:180px;"></textarea>
+            <div class="erro-campo" th:if="${#fields.hasErrors('texto')}" th:errors="*{texto}"></div>
+        </div>
+
+        <div class="campo" th:classappend="${#fields.hasErrors('data')} ? 'invalido'">
+            <label for="data">Data do atestado</label>
+            <input type="date" id="data" th:field="*{data}">
+            <div class="erro-campo" th:if="${#fields.hasErrors('data')}" th:errors="*{data}"></div>
+        </div>
+
+        <div class="botoes">
+            <button type="submit">Gerar PDF</button>
+            <a class="botao secundario" th:href="${voltarUrl}">Voltar</a>
+        </div>
+    </form>
+</main>
+<script th:src="@{/js/pdf-modal.js}" defer></script>
+</body>
+</html>

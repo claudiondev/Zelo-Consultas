@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Receituário')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: cabecalho}"></div>
+<main class="container">
+    <a class="voltar" th:href="${voltarUrl}">&larr; <span th:text="${pacienteNome}">Paciente</span></a>
+
+    <h1>Gerar receituário de controle especial</h1>
+    <p class="subtitulo" th:text="'Paciente: ' + ${pacienteNome}">Paciente</p>
+    <div class="alerta aviso">
+        Este é o receituário simples (papel branco, 2 vias) — não tem assinatura digital certificada.
+        Para receita com validade digital, use o portal do CFM/Memed.
+    </div>
+
+    <form class="form-gera-pdf" th:action="${acaoUrl}" th:object="${comando}" method="post" novalidate>
+        <div class="campo" th:classappend="${#fields.hasErrors('cpf')} ? 'invalido'">
+            <label for="cpf">CPF do paciente</label>
+            <input type="text" id="cpf" th:field="*{cpf}" placeholder="000.000.000-00">
+            <div class="erro-campo" th:if="${#fields.hasErrors('cpf')}" th:errors="*{cpf}"></div>
+        </div>
+
+        <div class="campo" th:classappend="${#fields.hasErrors('endereco')} ? 'invalido'">
+            <label for="endereco">Endereço do paciente</label>
+            <input type="text" id="endereco" th:field="*{endereco}">
+            <div class="erro-campo" th:if="${#fields.hasErrors('endereco')}" th:errors="*{endereco}"></div>
+        </div>
+
+        <div class="campo" th:classappend="${#fields.hasErrors('viaUso')} ? 'invalido'">
+            <label for="viaUso">Via de uso</label>
+            <input type="text" id="viaUso" th:field="*{viaUso}">
+            <div class="erro-campo" th:if="${#fields.hasErrors('viaUso')}" th:errors="*{viaUso}"></div>
+        </div>
+
+        <div class="campo" th:classappend="${#fields.hasErrors('prescricao')} ? 'invalido'">
+            <label for="prescricao">Prescrição (medicamento, dosagem, quantidade e posologia)</label>
+            <textarea id="prescricao" th:field="*{prescricao}" style="min-height:160px;"></textarea>
+            <div class="erro-campo" th:if="${#fields.hasErrors('prescricao')}" th:errors="*{prescricao}"></div>
+        </div>
+
+        <div class="campo" th:classappend="${#fields.hasErrors('data')} ? 'invalido'">
+            <label for="data">Data</label>
+            <input type="date" id="data" th:field="*{data}">
+            <div class="erro-campo" th:if="${#fields.hasErrors('data')}" th:errors="*{data}"></div>
+        </div>
+
+        <div class="botoes">
+            <button type="submit">Gerar PDF</button>
+            <a class="botao secundario" th:href="${voltarUrl}">Voltar</a>
+        </div>
+    </form>
+</main>
+<script th:src="@{/js/pdf-modal.js}" defer></script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Esquema terapêutico')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: cabecalho}"></div>
+<main class="container">
+    <a class="voltar" th:href="${voltarUrl}">&larr; <span th:text="${pacienteNome}">Paciente</span></a>
+
+    <h1>Gerar esquema terapêutico</h1>
+    <p class="subtitulo" th:text="'Paciente: ' + ${pacienteNome}">Paciente</p>
+
+    <div class="alerta erro" th:if="${erroGeral}" th:text="${erroGeral}"></div>
+
+    <form class="form-gera-pdf" th:action="${acaoUrl}" th:object="${comando}" method="post" novalidate>
+        <table style="margin-top:16px;">
+            <thead>
+            <tr>
+                <th>Medicamento</th>
+                <th>Manhã 8:00</th>
+                <th>Tarde 14:00</th>
+                <th>Noite 20:00</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody id="linhas-medicamentos">
+            <tr class="linha-medicamento" th:each="linha, status : *{linhas}">
+                <td><input type="text" data-campo="nomeMedicamento" th:name="|linhas[${status.index}].nomeMedicamento|" th:value="${linha.nomeMedicamento}"></td>
+                <td><input type="text" data-campo="manha" th:name="|linhas[${status.index}].manha|" th:value="${linha.manha}"></td>
+                <td><input type="text" data-campo="tarde" th:name="|linhas[${status.index}].tarde|" th:value="${linha.tarde}"></td>
+                <td><input type="text" data-campo="noite" th:name="|linhas[${status.index}].noite|" th:value="${linha.noite}"></td>
+                <td><button type="button" class="botao secundario remover-linha">Remover</button></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="botoes">
+            <button type="button" id="adicionar-medicamento" class="botao secundario">+ Adicionar medicamento</button>
+        </div>
+
+        <div class="campo" style="margin-top:20px;" th:classappend="${#fields.hasErrors('data')} ? 'invalido'">
+            <label for="data">Data</label>
+            <input type="date" id="data" th:field="*{data}">
+            <div class="erro-campo" th:if="${#fields.hasErrors('data')}" th:errors="*{data}"></div>
+        </div>
+
+        <div class="botoes">
+            <button type="submit">Gerar PDF</button>
+            <a class="botao secundario" th:href="${voltarUrl}">Voltar</a>
+        </div>
+    </form>
+</main>
+<script th:src="@{/js/esquema-terapeutico.js}" defer></script>
+<script th:src="@{/js/pdf-modal.js}" defer></script>
+</body>
+</html>

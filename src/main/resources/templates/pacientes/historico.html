@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Historico do paciente')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: cabecalho}"></div>
+<main class="container">
+    <a class="voltar" th:href="@{/pacientes/busca}">&larr; Pacientes</a>
+
+    <div class="alerta sucesso" th:if="${mensagem}" th:text="${mensagem}"></div>
+
+    <h1 th:text="${paciente.nome}">Nome</h1>
+    <p class="subtitulo">
+        CPF: <span th:text="${paciente.cpf} ?: 'nao informado'">-</span>
+        &middot; Nascimento: <span th:text="${#temporals.format(paciente.dataNascimento, 'dd/MM/yyyy')}">-</span>
+    </p>
+
+    <div class="botoes">
+        <a class="botao" th:href="@{/consultas/retorno/{id}(id=${paciente.id})}">Registrar nova consulta para este paciente</a>
+        <a class="botao secundario" th:href="@{/pacientes/{id}/atestado(id=${paciente.id})}">Gerar atestado avulso</a>
+        <a class="botao secundario" th:href="@{/pacientes/{id}/receituario(id=${paciente.id})}">Gerar receituário</a>
+        <a class="botao secundario" th:href="@{/pacientes/{id}/esquema-terapeutico(id=${paciente.id})}">Gerar esquema terapêutico</a>
+    </div>
+
+    <h2 style="margin-top:32px;">Historico de consultas</h2>
+
+    <p class="vazio" th:if="${#lists.isEmpty(consultas)}">Nenhuma consulta registrada ainda.</p>
+
+    <div class="cartao" th:each="consulta : ${consultas}">
+        <span class="eyebrow" th:text="${#temporals.format(consulta.data, 'dd/MM/yyyy')} + (${consulta.cid} ? ' &middot; CID ' + ${consulta.cid} : '')">Data</span>
+
+        <p th:text="${consulta.historico}">Historico</p>
+        <p><strong>Tratamento:</strong> <span th:text="${consulta.tratamento}"></span></p>
+        <p th:if="${consulta.atestadoDias}">
+            <strong>Atestado:</strong> <span th:text="${consulta.atestadoDias} + ' dia(s)'"></span>
+            &middot;
+            <a th:href="@{/consultas/{id}/atestado(id=${consulta.id})}">Gerar atestado (PDF)</a>
+        </p>
+        <p th:if="${consulta.valor}">
+            <strong>Valor:</strong> R$ <span th:text="${consulta.valor}"></span>
+        </p>
+        <p>
+            <a class="link-gera-pdf" th:href="@{/consultas/{id}/pdf(id=${consulta.id})}">Imprimir consulta (PDF)</a>
+        </p>
+    </div>
+</main>
+<script th:src="@{/js/pdf-modal.js}" defer></script>
+</body>
+</html>

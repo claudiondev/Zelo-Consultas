@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Confirmar paciente')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: cabecalho}"></div>
+<main class="container">
+    <h1>Ja existe alguem parecido</h1>
+    <div class="alerta aviso">
+        Encontramos paciente(s) com nome ou CPF parecido com o que voce digitou. Confira: e a mesma pessoa?
+    </div>
+
+    <div class="cartao" th:each="candidato : ${candidatos}">
+        <div class="candidato">
+            <div>
+                <strong th:text="${candidato.nome}">Nome</strong><br>
+                <span class="dica">
+                    CPF: <span th:text="${candidato.cpf} ?: 'nao informado'">-</span>
+                    &middot; Nascimento: <span th:text="${#temporals.format(candidato.dataNascimento, 'dd/MM/yyyy')}">-</span>
+                </span>
+            </div>
+            <form th:action="@{/consultas/nova/confirmar}" method="post">
+                <input type="hidden" name="pacienteExistenteId" th:value="${candidato.id}">
+                <button type="submit">E este paciente</button>
+            </form>
+        </div>
+    </div>
+
+    <form th:action="@{/consultas/nova/confirmar}" method="post" class="cartao">
+        <p>Nenhum destes e o paciente certo?</p>
+        <button type="submit" class="botao secundario">Nao, e um paciente novo</button>
+    </form>
+</main>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(titulo)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${titulo} + ' · ' + ${@prontuarioProperties.nomeApp}">Prontuario</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<header th:fragment="cabecalho" class="topo">
+    <a th:href="@{/}" class="marca" th:text="${@prontuarioProperties.nomeApp}">Zelo</a>
+    <nav>
+        <a th:href="@{/consultas}">Consultas</a>
+        <a th:href="@{/pacientes/busca}">Pacientes</a>
+        <a th:href="@{/internos}">Internos</a>
+        <a th:href="@{/backup}">Backup</a>
+        <form th:action="@{/logout}" method="post" style="display:inline;">
+            <button type="submit" class="botao-sair">Sair</button>
+        </form>
+        <span class="avatar" th:title="${@prontuarioProperties.medica.nome}" th:text="${@prontuarioProperties.medica.inicial}">E</span>
+    </nav>
+</header>
+</body>
+</html>

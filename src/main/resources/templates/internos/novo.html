@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Novo interno')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: cabecalho}"></div>
+<main class="container">
+    <a class="voltar" th:href="@{/internos}">&larr; Internos</a>
+
+    <h1>Novo interno</h1>
+    <p class="subtitulo">Cadastre o paciente e a primeira anotacao de rotina.</p>
+
+    <form th:action="@{/internos/novo}" th:object="${comando}" method="post" novalidate class="cartao">
+        <div class="campo" th:classappend="${#fields.hasErrors('nome')} ? 'invalido'">
+            <label for="i-nome">Nome *</label>
+            <input type="text" id="i-nome" th:field="*{nome}">
+            <div class="erro-campo" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></div>
+        </div>
+
+        <div class="campo" th:classappend="${#fields.hasErrors('dataNascimento')} ? 'invalido'">
+            <label for="i-nasc">Data de nascimento *</label>
+            <input type="date" id="i-nasc" th:field="*{dataNascimento}">
+            <div class="erro-campo" th:if="${#fields.hasErrors('dataNascimento')}" th:errors="*{dataNascimento}"></div>
+        </div>
+
+        <div class="campo" th:classappend="${#fields.hasErrors('data')} ? 'invalido'">
+            <label for="i-data">Data da anotacao *</label>
+            <input type="date" id="i-data" th:field="*{data}">
+            <div class="erro-campo" th:if="${#fields.hasErrors('data')}" th:errors="*{data}"></div>
+        </div>
+
+        <div class="campo" th:classappend="${#fields.hasErrors('anotacao')} ? 'invalido'">
+            <label for="i-anotacao">Anotacao *</label>
+            <textarea id="i-anotacao" th:field="*{anotacao}"></textarea>
+            <div class="erro-campo" th:if="${#fields.hasErrors('anotacao')}" th:errors="*{anotacao}"></div>
+        </div>
+
+        <div class="botoes">
+            <button type="submit">Salvar</button>
+            <a class="botao secundario" th:href="@{/internos}">Cancelar</a>
+        </div>
+    </form>
+</main>
+</body>
+</html>

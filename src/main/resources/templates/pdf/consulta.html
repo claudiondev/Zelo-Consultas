@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <style>
+        @page { size: A4; margin: 2cm 2.5cm; }
+        body { font-family: "Times New Roman", Georgia, serif; font-size: 11pt; color: #000; }
+
+        .cabecalho { text-align: center; margin-bottom: 24px; border-bottom: 1.5px solid #000; padding-bottom: 12px; }
+        .clinica-nome { font-size: 18pt; font-weight: bold; }
+        .clinica-info { font-size: 8.5pt; margin-top: 2px; }
+
+        .titulo { text-align: center; font-weight: bold; font-size: 12pt; margin: 18px 0 20px; text-transform: uppercase; }
+
+        .paciente { margin-bottom: 20px; }
+        .paciente table { width: 100%; border-collapse: collapse; }
+        .paciente td { padding: 3px 6px; font-size: 10.5pt; vertical-align: top; }
+        .paciente .rotulo { font-weight: bold; width: 130px; }
+
+        .bloco { margin-bottom: 14px; }
+        .bloco .rotulo { font-weight: bold; display: block; margin-bottom: 3px; }
+        .bloco .valor { text-align: justify; line-height: 1.5; white-space: pre-line; }
+
+        .assinatura { margin-top: 60px; text-align: center; }
+        .assinatura .linha { border-top: 1px solid #000; width: 55%; margin: 0 auto 4px; }
+    </style>
+</head>
+<body>
+<div class="cabecalho">
+    <div class="clinica-nome" th:text="${clinica.nome}">CLINICA</div>
+    <div class="clinica-info" th:text="${clinica.razaoSocial}">razao</div>
+    <div class="clinica-info" th:text="${clinica.endereco}">endereco</div>
+</div>
+
+<div class="titulo">Registro de Consulta</div>
+
+<div class="paciente">
+    <table>
+        <tr>
+            <td class="rotulo">Paciente</td>
+            <td th:text="${paciente.nome}">Nome</td>
+            <td class="rotulo">Data</td>
+            <td th:text="${dataConsulta}">00/00/0000</td>
+        </tr>
+        <tr>
+            <td class="rotulo">CPF</td>
+            <td th:text="${paciente.cpf} ?: '—'">—</td>
+            <td class="rotulo">Nascimento</td>
+            <td th:text="${dataNascimento}">—</td>
+        </tr>
+    </table>
+</div>
+
+<div class="bloco">
+    <span class="rotulo">Histórico</span>
+    <div class="valor" th:text="${consulta.historico}">historico</div>
+</div>
+
+<div class="bloco">
+    <span class="rotulo">Tratamento</span>
+    <div class="valor" th:text="${consulta.tratamento}">tratamento</div>
+</div>
+
+<div class="bloco" th:if="${consulta.obs}">
+    <span class="rotulo">Observação</span>
+    <div class="valor" th:text="${consulta.obs}">obs</div>
+</div>
+
+<div class="bloco" th:if="${consulta.cid}">
+    <span class="rotulo">CID</span>
+    <div class="valor" th:text="${consulta.cid}">cid</div>
+</div>
+
+<div class="bloco" th:if="${consulta.recomendacao}">
+    <span class="rotulo">Recomendação</span>
+    <div class="valor" th:text="${consulta.recomendacao}">recomendacao</div>
+</div>
+
+<div class="bloco" th:if="${consulta.riscoSuicidio}">
+    <span class="rotulo">Risco de suicídio</span>
+    <div class="valor" th:text="${consulta.riscoSuicidio}">risco</div>
+</div>
+
+<div class="bloco" th:if="${consulta.atestadoDias}">
+    <span class="rotulo">Atestado</span>
+    <div class="valor" th:text="${consulta.atestadoDias} + ' dia(s)'">dias</div>
+</div>
+
+<div class="bloco" th:if="${consulta.retornarEm}">
+    <span class="rotulo">Retornar em</span>
+    <div class="valor" th:text="${consulta.retornarEm}">retorno</div>
+</div>
+
+<div class="assinatura">
+    <div class="linha"></div>
+    <div th:text="${medica.nome}">Nome</div>
+    <div th:text="${medica.titulo}">Titulo</div>
+    <div th:text="${medica.crm}">CRM</div>
+</div>
+</body>
+</html>

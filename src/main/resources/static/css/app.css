@@ -1,0 +1,604 @@
+/* Identidade visual do prontuario. Sem fonte/CDN externa de proposito — o app
+   roda 100% offline num notebook 2-em-1 fraco (ver CLAUDE.md). Titulo e corpo
+   usam Segoe UI (ja vem no Windows dela) — e o que renderiza mais rapido pra
+   digitacao densa e evita depender de fonte baixada (Inter, so por CDN). */
+
+:root {
+  --tinta: #1a1f24;
+  --tinta-suave: #596370;
+  --tinta-mais-suave: #8c96a3;
+  --tinta-fantasma: #b3bac2;
+  --papel: #edfaf2;
+  --fundo: #f7f7fa;
+  --superficie: #ffffff;
+  --linha: #e6e8eb;
+  --linha-forte: #d3d7dc;
+  --pinheiro: #218c54;
+  --pinheiro-escuro: #1a7045;
+  --sucesso: #1a7045;
+  --sucesso-fundo: #edfaf2;
+  --aviso: #8a5a12;
+  --aviso-fundo: #f4e6cd;
+  --erro: #bf5959;
+  --erro-escuro: #993333;
+  --erro-fundo: #fbeaea;
+
+  --fonte-titulo: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif;
+  --fonte-corpo: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif;
+
+  --raio-cartao: 16px;
+  --raio-botao: 10px;
+  --sombra-cartao: 0 4px 20px rgba(26, 31, 36, 0.06);
+  --sombra-cartao-hover: 0 8px 32px rgba(26, 31, 36, 0.10);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--fundo);
+  color: var(--tinta);
+  font-family: var(--fonte-corpo);
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+a { color: var(--pinheiro-escuro); }
+
+/* ---------- Cabecalho ---------- */
+
+.topo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 24px;
+  background: var(--superficie);
+  border-left: 4px solid var(--pinheiro);
+  box-shadow: 0 1px 8px rgba(26, 31, 36, 0.04);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+.topo .marca {
+  text-decoration: none;
+  color: var(--pinheiro);
+  font-family: var(--fonte-titulo);
+  font-weight: 700;
+  font-size: 16px;
+}
+.topo nav { display: flex; align-items: center; gap: 8px; }
+.topo nav a {
+  text-decoration: none;
+  color: var(--tinta-suave);
+  font-weight: 500;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 14.5px;
+}
+.topo nav a:hover { background: var(--fundo); color: var(--tinta); }
+.topo nav button.botao-sair {
+  background: none;
+  border: none;
+  font: inherit;
+  font-weight: 500;
+  font-size: 14.5px;
+  color: var(--erro);
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.topo nav button.botao-sair:hover { background: var(--erro-fundo); }
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--pinheiro);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 700;
+  flex: 0 0 auto;
+}
+
+.container { max-width: 880px; margin: 0 auto; padding: 24px 20px 80px; }
+
+/* ---------- Tipografia ---------- */
+
+h1, h2, h3, legend {
+  font-family: var(--fonte-titulo);
+  font-weight: 700;
+  color: var(--tinta);
+}
+h1 { font-size: 28px; margin: 0 0 8px; }
+h2 { font-size: 21px; margin: 0 0 12px; }
+h3 { font-size: 17px; margin: 0 0 8px; }
+.subtitulo { color: var(--tinta-suave); margin: 0 0 28px; font-size: 15px; }
+
+.eyebrow {
+  display: block;
+  font-family: var(--fonte-corpo);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--pinheiro);
+  margin-bottom: 4px;
+}
+
+.voltar {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  color: var(--tinta-suave);
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+.voltar:hover { color: var(--pinheiro-escuro); }
+
+/* ---------- Cartoes e secoes ---------- */
+
+.cartao {
+  background: var(--superficie);
+  border: 1px solid var(--linha);
+  border-radius: var(--raio-cartao);
+  box-shadow: var(--sombra-cartao);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+fieldset {
+  border: 1px solid var(--linha);
+  border-radius: 12px;
+  padding: 16px 18px 18px;
+  margin: 0 0 20px;
+}
+
+/* Alvos de ancora da trilha de secoes (ver .trilha mais abaixo) — o prefixo
+   "sec-" marca de proposito os pontos que a navegacao lateral aponta. */
+[id^="sec-"] { scroll-margin-top: 84px; }
+legend { padding: 0 8px; color: var(--pinheiro-escuro); font-size: 18px; }
+
+/* ---------- Formulario ---------- */
+
+.campo { margin-bottom: 16px; }
+.campo label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 14.5px; }
+.campo .dica { color: var(--tinta-suave); font-size: 13px; margin-top: 4px; }
+
+input[type=text], input[type=date], input[type=number], input[type=tel],
+input[type=password], select, textarea {
+  width: 100%;
+  min-height: 46px;
+  padding: 10px 12px;
+  border: 1px solid var(--linha);
+  border-radius: 8px;
+  font-size: 16px;
+  font-family: inherit;
+  background: var(--superficie);
+  color: var(--tinta);
+}
+textarea { min-height: 90px; resize: vertical; }
+
+input:focus-visible, select:focus-visible, textarea:focus-visible,
+button:focus-visible, a:focus-visible {
+  outline: 3px solid var(--pinheiro);
+  outline-offset: 2px;
+}
+
+.campo.invalido input, .campo.invalido textarea, .campo.invalido select {
+  border-color: var(--erro);
+}
+.erro-campo { color: var(--erro); font-size: 13px; margin-top: 4px; }
+
+.linha-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+}
+.linha-checkbox input[type=checkbox] { width: 22px; height: 22px; }
+.linha-checkbox label { font-weight: 400; margin: 0; }
+
+.grade-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 16px; }
+.grade-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0 16px; }
+@media (max-width: 640px) {
+  .grade-2, .grade-3 { grid-template-columns: 1fr; }
+}
+
+details { margin-bottom: 20px; }
+details summary {
+  cursor: pointer;
+  font-weight: 700;
+  color: var(--pinheiro-escuro);
+  padding: 12px 4px;
+  font-size: 16px;
+}
+details[open] summary { margin-bottom: 8px; }
+
+.botoes { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px; }
+
+button, .botao {
+  display: inline-block;
+  min-height: 48px;
+  padding: 12px 22px;
+  border: none;
+  border-radius: var(--raio-botao);
+  background: var(--pinheiro);
+  color: #fff;
+  font-family: var(--fonte-corpo);
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(33, 140, 84, 0.2);
+  transition: background 0.2s ease;
+}
+button:hover, .botao:hover { background: var(--pinheiro-escuro); }
+.botao.secundario { background: var(--superficie); color: var(--tinta); border: 1px solid var(--linha); }
+.botao.secundario:hover { background: var(--fundo); }
+
+.alerta {
+  padding: 14px 16px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  font-size: 14.5px;
+}
+.alerta.sucesso { background: var(--sucesso-fundo); color: var(--sucesso); }
+.alerta.aviso { background: var(--aviso-fundo); color: var(--aviso); }
+.alerta.erro { background: var(--erro-fundo); color: var(--erro); }
+
+table { width: 100%; border-collapse: collapse; }
+th, td { text-align: left; padding: 12px 10px; border-bottom: 1px solid var(--linha); font-size: 14.5px; }
+th {
+  color: var(--tinta-suave);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+tbody tr:hover { background: var(--fundo); }
+
+.linha-medicamento input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid var(--linha);
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 14.5px;
+}
+
+.candidato {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid var(--linha);
+  border-radius: 10px;
+  margin-bottom: 12px;
+}
+
+.vazio { color: var(--tinta-suave); padding: 20px 0; }
+
+/* ---------- Home ---------- */
+
+.resumo {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  background: var(--papel);
+  border: 1px solid var(--linha);
+  border-radius: 12px;
+  padding: 18px 20px;
+  margin-bottom: 20px;
+}
+.resumo .numero {
+  font-family: var(--fonte-titulo);
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--pinheiro-escuro);
+}
+.resumo .rotulo { color: var(--tinta-suave); font-size: 14.5px; }
+
+.acoes { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 28px; }
+@media (max-width: 720px) { .acoes { grid-template-columns: 1fr; } }
+.acoes .cartao { margin-bottom: 0; display: flex; flex-direction: column; }
+.acoes .cartao p { flex: 1; color: var(--tinta-suave); font-size: 14.5px; }
+
+.recentes-lista { list-style: none; margin: 0; padding: 0; }
+.recentes-lista li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--linha);
+}
+.recentes-lista li:last-child { border-bottom: none; }
+.recentes-lista a { text-decoration: none; color: var(--tinta); font-weight: 600; }
+.recentes-lista a:hover { color: var(--pinheiro-escuro); }
+.recentes-lista .data { color: var(--tinta-suave); font-size: 13.5px; white-space: nowrap; }
+
+/* ---------- Trilha de secoes (Nova consulta / Retorno) ---------- */
+/* Espelha as divisorias de aba da ficha fisica dela (QP, HDA, PPM, H.PSIQ...)
+   pra servir de navegacao real num formulario com 10+ secoes. */
+
+.layout-formulario { display: grid; grid-template-columns: 132px 1fr; gap: 24px; align-items: start; }
+@media (max-width: 860px) {
+  .layout-formulario { grid-template-columns: 1fr; }
+}
+
+.trilha {
+  position: sticky;
+  top: 70px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: calc(100vh - 90px);
+  overflow-y: auto;
+  padding-right: 4px;
+}
+@media (max-width: 860px) {
+  .trilha {
+    position: sticky;
+    top: 62px;
+    flex-direction: row;
+    overflow-x: auto;
+    overflow-y: visible;
+    max-height: none;
+    background: var(--fundo);
+    padding: 10px 4px 14px;
+    margin: 0 -4px 4px;
+    z-index: 10;
+  }
+}
+
+.trilha-item {
+  display: block;
+  flex: 0 0 auto;
+  text-decoration: none;
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--pinheiro-escuro);
+  background: var(--papel);
+  border: 1px solid var(--linha);
+  border-left: 4px solid var(--pinheiro);
+  border-radius: 6px;
+  padding: 9px 12px;
+  white-space: nowrap;
+}
+@media (max-width: 860px) {
+  .trilha-item { border-left: 1px solid var(--linha); border-bottom: 4px solid var(--pinheiro); }
+}
+.trilha-item:hover { background: var(--superficie); }
+.trilha-item.ativa { background: var(--pinheiro); color: #fff; border-color: var(--pinheiro-escuro); }
+
+/* ---------- Escolha inicial (Consultas / Internos) ---------- */
+
+.pagina-escolha {
+  min-height: calc(100vh - 65px);
+  display: flex;
+  flex-direction: column;
+}
+.escolha-principal {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.saudacao { text-align: center; margin-bottom: 48px; }
+.saudacao h1 { font-size: 30px; margin-bottom: 8px; }
+.saudacao p { font-size: 15px; color: var(--tinta-mais-suave); margin: 0; }
+
+.modulo-cards { display: flex; gap: 32px; flex-wrap: wrap; justify-content: center; }
+
+.modulo-card {
+  background: var(--superficie);
+  border: 1px solid var(--linha);
+  border-radius: var(--raio-cartao);
+  width: 340px;
+  box-shadow: var(--sombra-cartao);
+  overflow: hidden;
+  text-align: center;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.modulo-card:hover { transform: translateY(-4px); box-shadow: var(--sombra-cartao-hover); }
+
+.modulo-card-faixa { height: 4px; background: var(--pinheiro); }
+.modulo-card-corpo { padding: 40px 36px 36px; }
+
+.modulo-icone {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background: var(--papel);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+}
+.modulo-icone svg {
+  width: 30px;
+  height: 30px;
+  stroke: var(--pinheiro);
+  fill: none;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.modulo-card h2 {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.modulo-card p { font-size: 14px; color: var(--tinta-mais-suave); line-height: 1.6; margin: 0 0 26px; }
+
+.modulo-card-botao {
+  display: inline-block;
+  background: var(--pinheiro);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 12px 44px;
+  border-radius: var(--raio-botao);
+}
+.modulo-card:hover .modulo-card-botao { background: var(--pinheiro-escuro); }
+
+.escolha-info { text-align: center; margin-top: 44px; font-size: 12px; color: var(--tinta-fantasma); }
+
+.rodape-simples {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 40px;
+  font-size: 12px;
+  color: var(--tinta-fantasma);
+}
+.rodape-simples button {
+  background: none;
+  border: none;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--erro);
+  cursor: pointer;
+  min-height: auto;
+  padding: 4px 0;
+  box-shadow: none;
+}
+.rodape-simples button:hover { color: var(--erro-escuro); background: none; }
+
+/* ---------- Login ---------- */
+
+.login-tela { min-height: 100vh; display: flex; }
+@media (max-width: 760px) { .login-tela { flex-direction: column; } }
+
+.login-painel {
+  flex: 0 0 40%;
+  position: relative;
+  overflow: hidden;
+  background: var(--pinheiro);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 48px;
+}
+@media (max-width: 760px) { .login-painel { flex: 0 0 auto; padding: 32px; min-height: 260px; } }
+
+.login-painel::before, .login-painel::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+}
+.login-painel::before { width: 220px; height: 220px; top: -70px; left: -70px; }
+.login-painel::after { width: 260px; height: 260px; bottom: -100px; right: -80px; }
+
+.login-icone {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.16);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  position: relative;
+  z-index: 1;
+}
+.login-identidade { position: relative; z-index: 1; }
+.login-identidade h1 { font-family: var(--fonte-titulo); font-size: 26px; margin: 20px 0 4px; color: #fff; }
+.login-identidade .especialidade { font-size: 14px; opacity: 0.85; margin: 0 0 20px; }
+.login-identidade .divisor { width: 40px; height: 2px; background: rgba(255, 255, 255, 0.4); margin-bottom: 20px; border: none; }
+.login-identidade .tagline { font-size: 14px; opacity: 0.85; line-height: 1.5; margin: 0; }
+
+.login-area {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  background: var(--fundo);
+}
+
+.login-card {
+  background: var(--superficie);
+  border-radius: var(--raio-cartao);
+  box-shadow: var(--sombra-cartao);
+  padding: 36px 40px;
+  width: 100%;
+  max-width: 380px;
+}
+.login-card h2 { font-size: 22px; margin-bottom: 6px; }
+.login-card .subtitulo { margin: 0 0 24px; }
+
+.badge-seguro {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: var(--sucesso-fundo);
+  color: var(--sucesso);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: 999px;
+  margin-top: 18px;
+}
+
+/* Modal de PDF (atestado, receituario, impressao de consulta) — abre por
+   cima da pagina atual em vez de navegar pra uma pagina em branco com o PDF. */
+.pdf-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(27, 36, 32, 0.65);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+}
+.pdf-modal.aberto { display: flex; }
+.pdf-modal-conteudo {
+  position: relative;
+  width: 92vw;
+  height: 92vh;
+  background: var(--superficie);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+}
+.pdf-modal-frame { width: 100%; height: 100%; border: 0; }
+.pdf-modal-fechar {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: var(--tinta);
+  color: var(--superficie);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 1;
+}
+.pdf-modal-fechar:hover { background: var(--pinheiro-escuro); }

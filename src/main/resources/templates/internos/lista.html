@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Internos')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: cabecalho}"></div>
+<main class="container">
+    <a class="voltar" th:href="@{/}">&larr; Inicio</a>
+
+    <h1>Internos</h1>
+    <p class="subtitulo">Pacientes internados que voce acompanha na clinica.</p>
+
+    <a class="botao" th:href="@{/internos/novo}">Novo interno</a>
+
+    <p class="vazio" th:if="${#lists.isEmpty(internos)}" style="margin-top:20px;">Nenhum interno cadastrado ainda.</p>
+
+    <table th:if="${!#lists.isEmpty(internos)}" style="margin-top:20px;">
+        <thead>
+        <tr><th>Nome</th><th>Nascimento</th><th></th></tr>
+        </thead>
+        <tbody>
+        <tr th:each="interno : ${internos}">
+            <td th:text="${interno.nome}">Nome</td>
+            <td th:text="${#temporals.format(interno.dataNascimento, 'dd/MM/yyyy')}">-</td>
+            <td><a th:href="@{/internos/{id}(id=${interno.id})}">Ver ficha</a></td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+</body>
+</html>

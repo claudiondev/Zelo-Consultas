@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Consultas')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: cabecalho}"></div>
+<main class="container">
+    <a class="voltar" th:href="@{/}">&larr; Inicio</a>
+
+    <h1>Consultas</h1>
+    <p class="subtitulo" th:text="'Dra. ' + ${@prontuarioProperties.medica.nome} + ' · ' + ${@prontuarioProperties.medica.crm}">Dra. Ana Ribeiro · CRM-UF: 0000</p>
+
+    <div class="alerta aviso" th:if="${lembrarBackup}">
+        Faz um tempo que voce nao grava uma copia de seguranca no pendrive.
+        <a th:href="@{/backup}">Gravar agora</a> — leva poucos segundos.
+    </div>
+
+    <div class="resumo">
+        <span class="numero" th:text="${totalPacientes}">0</span>
+        <span class="rotulo" th:text="${totalPacientes == 1} ? 'paciente cadastrado' : 'pacientes cadastrados'">pacientes cadastrados</span>
+    </div>
+
+    <div class="acoes">
+        <div class="cartao">
+            <h2>Nova consulta</h2>
+            <p>Registrar um atendimento novo ou de retorno. O sistema procura pacientes parecidos antes de salvar.</p>
+            <a class="botao" th:href="@{/consultas/nova}">Comecar</a>
+        </div>
+
+        <div class="cartao">
+            <h2>Pacientes</h2>
+            <p>Ver todos os pacientes cadastrados, buscar por nome ou CPF e abrir o historico.</p>
+            <a class="botao secundario" th:href="@{/pacientes/busca}">Ver pacientes</a>
+        </div>
+    </div>
+
+    <h2>Últimos atendimentos</h2>
+    <p class="vazio" th:if="${#lists.isEmpty(recentes)}">Nenhum atendimento registrado ainda.</p>
+    <ul class="recentes-lista" th:unless="${#lists.isEmpty(recentes)}">
+        <li th:each="r : ${recentes}">
+            <a th:href="@{/pacientes/{id}/historico(id=${r.patientId})}" th:text="${r.patientNome}">Nome</a>
+            <span class="data" th:text="${#temporals.format(r.data, 'dd/MM/yyyy')}">-</span>
+        </li>
+    </ul>
+</main>
+</body>
+</html>

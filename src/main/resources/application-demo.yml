@@ -1,0 +1,23 @@
+# Perfil de demonstração — dados fictícios pra gravar vídeo do sistema
+# sem expor a médica/clínica/pacientes reais. Ativado com --spring.profiles.active=demo.
+# Banco proprio (data-demo/), separado do banco real (data/) — pacientes
+# cadastrados aqui nunca se misturam com os dela. Sobrescreve so identidade
+# exibida (medica + clinica) e o arquivo de banco; schema e regras de negocio
+# sao os mesmos do perfil padrao.
+spring:
+  datasource:
+    url: jdbc:h2:file:./data-demo/prontuario-demo;DB_CLOSE_ON_EXIT=FALSE
+
+prontuario:
+  medica:
+    nome: "Ana Ribeiro"
+    titulo: "Médica"
+    especialidade: "Médica Psiquiatra"
+    crm: "CRM-PB: 0000"
+    rqe: ""
+  clinica:
+    nome: "CLÍNICA MODELO"
+    razao-social: "CLÍNICA MODELO DEMONSTRATIVA LTDA."
+    endereco: "RUA EXEMPLO, 123 – CENTRO - CIDADE - UF"
+    complemento: "CEP 00000-000 - FONE (00) 0000-0000 - E-MAIL: contato@exemplo.com"
+    cidade: "Cidade-UF"

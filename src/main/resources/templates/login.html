@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="'Entrar · ' + ${@prontuarioProperties.nomeApp}">Entrar · Zelo</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<div class="login-tela">
+    <div class="login-painel">
+        <span class="login-icone">&#129658;</span>
+        <div class="login-identidade">
+            <h1 th:text="'Dra. ' + ${@prontuarioProperties.medica.nome}">Dra. Ana Ribeiro</h1>
+            <p class="especialidade" th:text="${@prontuarioProperties.medica.especialidade} + ' · ' + ${@prontuarioProperties.medica.crm}">Médica Psiquiatra · CRM-UF: 0000</p>
+            <hr class="divisor">
+            <p class="tagline" th:text="${@prontuarioProperties.nomeApp} + ' — Organização de consultas e prontuários'">Zelo — Organização de consultas e prontuários</p>
+        </div>
+        <span></span>
+    </div>
+
+    <div class="login-area">
+        <div class="login-card">
+            <h2>Acesso ao Sistema</h2>
+            <p class="subtitulo">Insira suas credenciais para continuar</p>
+
+            <div class="alerta erro" th:if="${erro}">Usuario ou senha incorretos.</div>
+            <div class="alerta sucesso" th:if="${saiu}">Voce saiu do sistema.</div>
+
+            <form th:action="@{/login}" method="post">
+                <div class="campo">
+                    <label for="username">Usuario</label>
+                    <input type="text" id="username" name="username" placeholder="Digite seu usuario" autofocus>
+                </div>
+                <div class="campo">
+                    <label for="password">Senha</label>
+                    <input type="password" id="password" name="password" placeholder="Digite sua senha">
+                </div>
+                <button type="submit" style="width:100%;">Entrar</button>
+            </form>
+
+            <div class="badge-seguro">&#128274; Sistema local &middot; LGPD</div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

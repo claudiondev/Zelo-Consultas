@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Nova consulta')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: cabecalho}"></div>
+<main class="container">
+    <h1>Nova consulta</h1>
+    <p class="subtitulo">Preencha os dados do paciente e da consulta. Se ja existir alguem parecido cadastrado, o sistema vai perguntar antes de salvar.</p>
+
+    <div class="layout-formulario">
+    <nav class="trilha" aria-label="Seções da consulta">
+        <a class="trilha-item" href="#sec-paciente">Paciente</a>
+        <a class="trilha-item" href="#sec-qp">QP</a>
+        <a class="trilha-item" href="#sec-hda">HDA</a>
+        <a class="trilha-item" href="#sec-crianca">CR</a>
+        <a class="trilha-item" href="#sec-adolescente">AD</a>
+        <a class="trilha-item" href="#sec-adulto">AU</a>
+        <a class="trilha-item" href="#sec-ppm">PPM</a>
+        <a class="trilha-item" href="#sec-hpsiq">H.PSIQ</a>
+        <a class="trilha-item" href="#sec-hoje">Hoje</a>
+    </nav>
+
+    <form th:action="@{/consultas/nova}" th:object="${comando}" method="post" novalidate>
+
+        <fieldset id="sec-paciente">
+            <legend>Dados do paciente</legend>
+
+            <div class="campo" th:classappend="${#fields.hasErrors('patient.nome')} ? 'invalido'">
+                <label for="p-nome">Nome *</label>
+                <input type="text" id="p-nome" th:field="*{patient.nome}">
+                <div class="erro-campo" th:if="${#fields.hasErrors('patient.nome')}" th:errors="*{patient.nome}"></div>
+            </div>
+
+            <div class="grade-2">
+                <div class="campo" th:classappend="${#fields.hasErrors('patient.cpf')} ? 'invalido'">
+                    <label for="p-cpf">CPF</label>
+                    <input type="text" id="p-cpf" th:field="*{patient.cpf}" placeholder="opcional">
+                    <div class="erro-campo" th:if="${#fields.hasErrors('patient.cpf')}" th:errors="*{patient.cpf}"></div>
+                </div>
+                <div class="campo" th:classappend="${#fields.hasErrors('patient.dataNascimento')} ? 'invalido'">
+                    <label for="p-nasc">Data de nascimento *</label>
+                    <input type="date" id="p-nasc" th:field="*{patient.dataNascimento}">
+                    <div class="erro-campo" th:if="${#fields.hasErrors('patient.dataNascimento')}" th:errors="*{patient.dataNascimento}"></div>
+                </div>
+            </div>
+
+            <div class="grade-2">
+                <div class="campo" th:classappend="${#fields.hasErrors('patient.sexo')} ? 'invalido'">
+                    <label for="p-sexo">Sexo *</label>
+                    <select id="p-sexo" th:field="*{patient.sexo}">
+                        <option value="">Selecione</option>
+                        <option value="F">Feminino</option>
+                        <option value="M">Masculino</option>
+                    </select>
+                    <div class="erro-campo" th:if="${#fields.hasErrors('patient.sexo')}" th:errors="*{patient.sexo}"></div>
+                </div>
+                <div class="campo" th:classappend="${#fields.hasErrors('patient.telefone')} ? 'invalido'">
+                    <label for="p-fone">Telefone *</label>
+                    <input type="tel" id="p-fone" th:field="*{patient.telefone}">
+                    <div class="erro-campo" th:if="${#fields.hasErrors('patient.telefone')}" th:errors="*{patient.telefone}"></div>
+                </div>
+            </div>
+
+            <div class="grade-2">
+                <div class="campo">
+                    <label for="p-plano">Plano de saude</label>
+                    <select id="p-plano" th:field="*{patient.planoSaude}">
+                        <option value="">Nao informado</option>
+                        <option value="Particular">Particular</option>
+                        <option value="Cassi">Cassi</option>
+                        <option value="Hapvida">Hapvida</option>
+                        <option value="Sulamerica">Sulamerica</option>
+                        <option value="GEAP">GEAP</option>
+                        <option value="Camed">Camed</option>
+                    </select>
+                </div>
+                <div class="campo">
+                    <label for="p-local">Local de atendimento</label>
+                    <input type="text" id="p-local" th:field="*{patient.localAtendimento}">
+                </div>
+            </div>
+
+            <div class="campo">
+                <label for="p-endereco">Endereco</label>
+                <input type="text" id="p-endereco" th:field="*{patient.endereco}">
+            </div>
+
+            <div class="grade-3">
+                <div class="campo">
+                    <label for="p-religiao">Religiao</label>
+                    <input type="text" id="p-religiao" th:field="*{patient.religiao}">
+                </div>
+                <div class="campo">
+                    <label for="p-profissao">Profissao</label>
+                    <input type="text" id="p-profissao" th:field="*{patient.profissao}">
+                </div>
+                <div class="campo">
+                    <label for="p-acompanhante">Acompanhante</label>
+                    <input type="text" id="p-acompanhante" th:field="*{patient.acompanhante}">
+                </div>
+            </div>
+
+            <div class="grade-2">
+                <div class="campo">
+                    <label for="p-valor">Valor padrao da consulta (R$)</label>
+                    <input type="number" step="0.01" min="0" id="p-valor" th:field="*{patient.valorConsultaPadrao}">
+                </div>
+                <div class="campo">
+                    <label for="p-recibo">Recibo / NF</label>
+                    <input type="text" id="p-recibo" th:field="*{patient.reciboNf}">
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Anamnese (preenchida uma unica vez)</legend>
+
+            <div id="sec-qp" class="campo" th:classappend="${#fields.hasErrors('anamnesis.queixaPrincipal')} ? 'invalido'">
+                <span class="eyebrow">QP</span>
+                <label for="a-qp">Queixa principal *</label>
+                <textarea id="a-qp" th:field="*{anamnesis.queixaPrincipal}"></textarea>
+                <div class="erro-campo" th:if="${#fields.hasErrors('anamnesis.queixaPrincipal')}" th:errors="*{anamnesis.queixaPrincipal}"></div>
+            </div>
+
+            <div id="sec-hda" class="campo" th:classappend="${#fields.hasErrors('anamnesis.historiaDoencaAtual')} ? 'invalido'">
+                <span class="eyebrow">HDA</span>
+                <label for="a-hda">Historia da doenca atual *</label>
+                <textarea id="a-hda" th:field="*{anamnesis.historiaDoencaAtual}"></textarea>
+                <div class="erro-campo" th:if="${#fields.hasErrors('anamnesis.historiaDoencaAtual')}" th:errors="*{anamnesis.historiaDoencaAtual}"></div>
+            </div>
+
+            <details open>
+                <summary>Sintomas observados na entrevista</summary>
+                <p class="dica">Marque o que foi observado. Deixar desmarcado sera gravado como "ausente" nesta versao provisoria (ver observacao no rodape).</p>
+                <div class="grade-3">
+                    <div class="linha-checkbox"><input type="checkbox" id="s-humor" th:field="*{anamnesis.checklistSintomas.humor}"><label for="s-humor">Humor</label></div>
+                    <div class="linha-checkbox"><input type="checkbox" id="s-culpa" th:field="*{anamnesis.checklistSintomas.culpa}"><label for="s-culpa">Culpa</label></div>
+                    <div class="linha-checkbox"><input type="checkbox" id="s-suicidio" th:field="*{anamnesis.checklistSintomas.suicidio}"><label for="s-suicidio">Suicidio</label></div>
+                    <div class="linha-checkbox"><input type="checkbox" id="s-insonia" th:field="*{anamnesis.checklistSintomas.insonia}"><label for="s-insonia">Insonia</label></div>
+                    <div class="linha-checkbox"><input type="checkbox" id="s-pensamento" th:field="*{anamnesis.checklistSintomas.pensamento}"><label for="s-pensamento">Pensamento</label></div>
+                    <div class="linha-checkbox"><input type="checkbox" id="s-agitacao" th:field="*{anamnesis.checklistSintomas.agitacao}"><label for="s-agitacao">Agitacao</label></div>
+                    <div class="linha-checkbox"><input type="checkbox" id="s-ansiedade" th:field="*{anamnesis.checklistSintomas.ansiedadeTensao}"><label for="s-ansiedade">Ansiedade/tensao</label></div>
+                    <div class="linha-checkbox"><input type="checkbox" id="s-tiques" th:field="*{anamnesis.checklistSintomas.tiques}"><label for="s-tiques">Tiques</label></div>
+                    <div class="linha-checkbox"><input type="checkbox" id="s-toc" th:field="*{anamnesis.checklistSintomas.toc}"><label for="s-toc">TOC</label></div>
+                    <div class="linha-checkbox"><input type="checkbox" id="s-intelectual" th:field="*{anamnesis.checklistSintomas.dificuldadesIntelectuais}"><label for="s-intelectual">Dif. intelectuais</label></div>
+                    <div class="linha-checkbox"><input type="checkbox" id="s-digestorio" th:field="*{anamnesis.checklistSintomas.sintomasDigestorios}"><label for="s-digestorio">Sint. digestorios</label></div>
+                    <div class="linha-checkbox"><input type="checkbox" id="s-muscular" th:field="*{anamnesis.checklistSintomas.sintomasMuscular}"><label for="s-muscular">Sint. muscular</label></div>
+                    <div class="linha-checkbox"><input type="checkbox" id="s-genito" th:field="*{anamnesis.checklistSintomas.sintomasGenitourinarios}"><label for="s-genito">Sint. genitourinarios</label></div>
+                    <div class="linha-checkbox"><input type="checkbox" id="s-hipocondria" th:field="*{anamnesis.checklistSintomas.hipocondria}"><label for="s-hipocondria">Hipocondria</label></div>
+                    <div class="linha-checkbox"><input type="checkbox" id="s-critica" th:field="*{anamnesis.checklistSintomas.criticaDaDoenca}"><label for="s-critica">Critica da doenca</label></div>
+                    <div class="linha-checkbox"><input type="checkbox" id="s-incapacidade" th:field="*{anamnesis.checklistSintomas.incapacidadeDeSentir}"><label for="s-incapacidade">Incapacidade de sentir</label></div>
+                </div>
+            </details>
+
+            <details open>
+                <summary>Dados clinicos gerais</summary>
+                <div class="grade-3">
+                    <div class="linha-checkbox"><input type="checkbox" id="c-fumante" th:field="*{anamnesis.dadosClinicos.fumante}"><label for="c-fumante">Fumante</label></div>
+                    <div class="linha-checkbox"><input type="checkbox" id="c-etilista" th:field="*{anamnesis.dadosClinicos.etilista}"><label for="c-etilista">Etilista</label></div>
+                    <div class="linha-checkbox"><input type="checkbox" id="c-spa" th:field="*{anamnesis.dadosClinicos.usoSpa}"><label for="c-spa">Uso de SPA</label></div>
+                </div>
+                <div class="grade-2">
+                    <div class="campo">
+                        <label for="c-altura">Altura (cm)</label>
+                        <input type="number" id="c-altura" th:field="*{anamnesis.dadosClinicos.alturaCm}">
+                    </div>
+                    <div class="campo">
+                        <label for="c-peso">Peso (kg)</label>
+                        <input type="number" step="0.1" id="c-peso" th:field="*{anamnesis.dadosClinicos.pesoKg}">
+                    </div>
+                </div>
+                <div class="campo">
+                    <label for="c-sinal">Sinal / particularidade</label>
+                    <input type="text" id="c-sinal" th:field="*{anamnesis.dadosClinicos.sinalParticularidade}">
+                </div>
+                <div class="campo">
+                    <label for="c-obs">Observacao</label>
+                    <textarea id="c-obs" th:field="*{anamnesis.dadosClinicos.observacao}"></textarea>
+                </div>
+                <div class="campo">
+                    <label for="c-cirurgias">Cirurgias</label>
+                    <input type="text" id="c-cirurgias" th:field="*{anamnesis.dadosClinicos.cirurgias}">
+                </div>
+                <div class="campo">
+                    <label for="c-tto">Tratamento medico</label>
+                    <input type="text" id="c-tto" th:field="*{anamnesis.dadosClinicos.tratamentoMedico}">
+                </div>
+                <div class="campo">
+                    <label for="c-afdm">AFDM (antecedentes familiares de doenca mental)</label>
+                    <input type="text" id="c-afdm" th:field="*{anamnesis.dadosClinicos.antecedentesFamiliaresDoencaMental}">
+                </div>
+                <div class="campo">
+                    <label for="c-afam">A.FAM. (antecedentes familiares)</label>
+                    <input type="text" id="c-afam" th:field="*{anamnesis.dadosClinicos.antecedentesFamiliares}">
+                </div>
+                <div class="grade-2">
+                    <div class="campo">
+                        <label for="c-dumtpm">DUM / TPM</label>
+                        <input type="text" id="c-dumtpm" th:field="*{anamnesis.dadosClinicos.dumTpm}">
+                    </div>
+                    <div class="campo">
+                        <label for="c-anti">Anticoncepcional</label>
+                        <input type="text" id="c-anti" th:field="*{anamnesis.dadosClinicos.anticoncepcional}">
+                    </div>
+                </div>
+            </details>
+
+            <details id="sec-crianca">
+                <summary>Secao crianca (preencher so se o paciente for crianca)</summary>
+                <div class="grade-2">
+                    <div class="campo"><label for="cr-alim">Alimentacao</label><input type="text" id="cr-alim" th:field="*{anamnesis.dadosCrianca.alimentacao}"></div>
+                    <div class="campo"><label for="cr-marcha">Marcha</label><input type="text" id="cr-marcha" th:field="*{anamnesis.dadosCrianca.marcha}"></div>
+                    <div class="campo"><label for="cr-ling">Linguagem</label><input type="text" id="cr-ling" th:field="*{anamnesis.dadosCrianca.linguagem}"></div>
+                    <div class="campo"><label for="cr-sono">Sono</label><input type="text" id="cr-sono" th:field="*{anamnesis.dadosCrianca.sono}"></div>
+                    <div class="campo"><label for="cr-esfinc">Esfincteres</label><input type="text" id="cr-esfinc" th:field="*{anamnesis.dadosCrianca.esfincteres}"></div>
+                    <div class="campo"><label for="cr-tiques">Tiques</label><input type="text" id="cr-tiques" th:field="*{anamnesis.dadosCrianca.tiques}"></div>
+                    <div class="campo"><label for="cr-escolar">Escolar</label><input type="text" id="cr-escolar" th:field="*{anamnesis.dadosCrianca.escolar}"></div>
+                    <div class="campo"><label for="cr-social">Social</label><input type="text" id="cr-social" th:field="*{anamnesis.dadosCrianca.social}"></div>
+                    <div class="campo"><label for="cr-dpi">DPI</label><input type="text" id="cr-dpi" th:field="*{anamnesis.dadosCrianca.dpi}"></div>
+                    <div class="campo"><label for="cr-hosp">Hospitalizacao</label><input type="text" id="cr-hosp" th:field="*{anamnesis.dadosCrianca.hospitalizacao}"></div>
+                    <div class="campo"><label for="cr-vacinas">Vacinas</label><input type="text" id="cr-vacinas" th:field="*{anamnesis.dadosCrianca.vacinas}"></div>
+                    <div class="campo"><label for="cr-celular">Uso de celular</label><input type="text" id="cr-celular" th:field="*{anamnesis.dadosCrianca.usoCelular}"></div>
+                </div>
+            </details>
+
+            <details id="sec-adolescente">
+                <summary>Secao adolescente (preencher so se o paciente for adolescente)</summary>
+                <div class="grade-2">
+                    <div class="campo"><label for="ad-soc">Socializacao</label><input type="text" id="ad-soc" th:field="*{anamnesis.dadosAdolescente.socializacao}"></div>
+                    <div class="campo"><label for="ad-namoro">Namoro / sexo</label><input type="text" id="ad-namoro" th:field="*{anamnesis.dadosAdolescente.namoroSexo}"></div>
+                    <div class="campo"><label for="ad-drogas">Drogas</label><input type="text" id="ad-drogas" th:field="*{anamnesis.dadosAdolescente.drogas}"></div>
+                    <div class="campo"><label for="ad-legal">Problemas legais</label><input type="text" id="ad-legal" th:field="*{anamnesis.dadosAdolescente.problemasLegais}"></div>
+                </div>
+                <div class="campo"><label for="ad-obs">Observacao</label><textarea id="ad-obs" th:field="*{anamnesis.dadosAdolescente.observacao}"></textarea></div>
+            </details>
+
+            <details id="sec-adulto">
+                <summary>Secao adulto</summary>
+                <div class="grade-3">
+                    <div class="campo"><label for="au-lforma">Laboral (forma)</label><input type="text" id="au-lforma" th:field="*{anamnesis.dadosAdulto.laboralForma}"></div>
+                    <div class="campo"><label for="au-lfuncao">Laboral (funcao)</label><input type="text" id="au-lfuncao" th:field="*{anamnesis.dadosAdulto.laboralFuncao}"></div>
+                    <div class="campo"><label for="au-ladeq">Laboral (adequacao)</label><input type="text" id="au-ladeq" th:field="*{anamnesis.dadosAdulto.laboralAdequacao}"></div>
+                </div>
+                <div class="grade-3">
+                    <div class="campo"><label for="au-samizade">Social (amizade)</label><input type="text" id="au-samizade" th:field="*{anamnesis.dadosAdulto.socialAmizade}"></div>
+                    <div class="campo"><label for="au-shabitos">Social (habitos)</label><input type="text" id="au-shabitos" th:field="*{anamnesis.dadosAdulto.socialHabitos}"></div>
+                    <div class="campo"><label for="au-slazer">Social (lazer)</label><input type="text" id="au-slazer" th:field="*{anamnesis.dadosAdulto.socialLazer}"></div>
+                </div>
+                <div class="grade-2">
+                    <div class="campo"><label for="au-conjuge">Familia (conjuge)</label><input type="text" id="au-conjuge" th:field="*{anamnesis.dadosAdulto.familiaConjuge}"></div>
+                    <div class="campo"><label for="au-morcom">Familia (mora com)</label><input type="text" id="au-morcom" th:field="*{anamnesis.dadosAdulto.familiaMoraCom}"></div>
+                </div>
+            </details>
+
+            <div id="sec-ppm" class="campo">
+                <span class="eyebrow">PPM</span>
+                <label for="a-ppm">PPM (passado psiquiatrico morbido)</label>
+                <textarea id="a-ppm" th:field="*{anamnesis.passadoPsiquiatricoMorbido}"></textarea>
+            </div>
+
+            <details id="sec-hpsiq" open>
+                <summary>H.Psiq (historia psiquiatrica)</summary>
+                <div class="campo"><label for="hp-tto">Tratamento medicamentoso</label><input type="text" id="hp-tto" th:field="*{anamnesis.historiaPsiquiatrica.tratamentoMedicamentoso}"></div>
+                <div class="grade-2">
+                    <div class="campo"><label for="hp-tempo">Tempo</label><input type="text" id="hp-tempo" th:field="*{anamnesis.historiaPsiquiatrica.tempo}"></div>
+                    <div class="campo"><label for="hp-adesao">Adesao</label><input type="text" id="hp-adesao" th:field="*{anamnesis.historiaPsiquiatrica.adesao}"></div>
+                </div>
+                <div class="campo"><label for="hp-medico">Medico responsavel</label><input type="text" id="hp-medico" th:field="*{anamnesis.historiaPsiquiatrica.medicoResponsavel}"></div>
+                <div class="linha-checkbox"><input type="checkbox" id="hp-ect" th:field="*{anamnesis.historiaPsiquiatrica.ect}"><label for="hp-ect">ECT (eletroconvulsoterapia)</label></div>
+                <div class="campo"><label for="hp-hosp">Hospitalizacao</label><input type="text" id="hp-hosp" th:field="*{anamnesis.historiaPsiquiatrica.hospitalizacao}"></div>
+                <div class="campo"><label for="hp-exames">Exames</label><input type="text" id="hp-exames" th:field="*{anamnesis.historiaPsiquiatrica.exames}"></div>
+            </details>
+        </fieldset>
+
+        <fieldset id="sec-hoje">
+            <legend>Consulta de hoje</legend>
+
+            <div class="grade-2">
+                <div class="campo" th:classappend="${#fields.hasErrors('consultation.data')} ? 'invalido'">
+                    <label for="con-data">Data *</label>
+                    <input type="date" id="con-data" th:field="*{consultation.data}">
+                    <div class="erro-campo" th:if="${#fields.hasErrors('consultation.data')}" th:errors="*{consultation.data}"></div>
+                </div>
+                <div class="campo">
+                    <label for="con-cid">CID</label>
+                    <input type="text" id="con-cid" th:field="*{consultation.cid}">
+                </div>
+            </div>
+
+            <div class="campo" th:classappend="${#fields.hasErrors('consultation.historico')} ? 'invalido'">
+                <label for="con-historico">Historico *</label>
+                <textarea id="con-historico" th:field="*{consultation.historico}"></textarea>
+                <div class="erro-campo" th:if="${#fields.hasErrors('consultation.historico')}" th:errors="*{consultation.historico}"></div>
+            </div>
+
+            <div class="campo" th:classappend="${#fields.hasErrors('consultation.tratamento')} ? 'invalido'">
+                <label for="con-tratamento">Tratamento *</label>
+                <textarea id="con-tratamento" th:field="*{consultation.tratamento}"></textarea>
+                <div class="erro-campo" th:if="${#fields.hasErrors('consultation.tratamento')}" th:errors="*{consultation.tratamento}"></div>
+            </div>
+
+            <div class="campo">
+                <label for="con-obs">Observacao</label>
+                <textarea id="con-obs" th:field="*{consultation.obs}"></textarea>
+            </div>
+
+            <div class="grade-2">
+                <div class="campo" th:classappend="${#fields.hasErrors('consultation.atestadoDias')} ? 'invalido'">
+                    <label for="con-atestado">Atestado (dias)</label>
+                    <input type="number" min="0" id="con-atestado" th:field="*{consultation.atestadoDias}">
+                    <div class="erro-campo" th:if="${#fields.hasErrors('consultation.atestadoDias')}" th:errors="*{consultation.atestadoDias}"></div>
+                </div>
+                <div class="campo">
+                    <label for="con-valor">Valor (R$)</label>
+                    <input type="number" step="0.01" min="0" id="con-valor" th:field="*{consultation.valor}">
+                </div>
+            </div>
+
+            <div class="campo">
+                <label for="con-recomendacao">Recomendacao</label>
+                <input type="text" id="con-recomendacao" th:field="*{consultation.recomendacao}">
+            </div>
+
+            <div class="campo">
+                <label for="con-risco">Risco de suicidio</label>
+                <input type="text" id="con-risco" th:field="*{consultation.riscoSuicidio}">
+            </div>
+
+            <div class="campo">
+                <label for="con-retorno">Retornar em</label>
+                <input type="text" id="con-retorno" th:field="*{consultation.retornarEm}" placeholder="ex.: 30 dias">
+            </div>
+        </fieldset>
+
+        <div class="botoes">
+            <button type="submit">Salvar</button>
+            <a class="botao secundario" th:href="@{/}">Cancelar</a>
+        </div>
+    </form>
+    </div>
+</main>
+<script th:src="@{/js/trilha.js}" defer></script>
+</body>
+</html>

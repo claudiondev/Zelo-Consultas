@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Consulta de retorno')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: cabecalho}"></div>
+<main class="container">
+    <a class="voltar" th:href="@{/pacientes/{id}/historico(id=${paciente.id})}">&larr; <span th:text="${paciente.nome}">Paciente</span></a>
+
+    <h1>Consulta de retorno</h1>
+    <p class="subtitulo" th:text="'Paciente: ' + ${paciente.nome}">Paciente</p>
+
+    <form th:action="@{/consultas/retorno/{id}(id=${paciente.id})}" th:object="${comando}" method="post" novalidate>
+        <fieldset>
+            <legend>Evolucao</legend>
+
+            <div class="grade-2">
+                <div class="campo" th:classappend="${#fields.hasErrors('data')} ? 'invalido'">
+                    <label for="con-data">Data *</label>
+                    <input type="date" id="con-data" th:field="*{data}">
+                    <div class="erro-campo" th:if="${#fields.hasErrors('data')}" th:errors="*{data}"></div>
+                </div>
+                <div class="campo">
+                    <label for="con-cid">CID</label>
+                    <input type="text" id="con-cid" th:field="*{cid}">
+                </div>
+            </div>
+
+            <div class="campo" th:classappend="${#fields.hasErrors('historico')} ? 'invalido'">
+                <label for="con-historico">Historico *</label>
+                <textarea id="con-historico" th:field="*{historico}"></textarea>
+                <div class="erro-campo" th:if="${#fields.hasErrors('historico')}" th:errors="*{historico}"></div>
+            </div>
+
+            <div class="campo" th:classappend="${#fields.hasErrors('tratamento')} ? 'invalido'">
+                <label for="con-tratamento">Tratamento *</label>
+                <textarea id="con-tratamento" th:field="*{tratamento}"></textarea>
+                <div class="erro-campo" th:if="${#fields.hasErrors('tratamento')}" th:errors="*{tratamento}"></div>
+            </div>
+
+            <div class="campo">
+                <label for="con-obs">Observacao</label>
+                <textarea id="con-obs" th:field="*{obs}"></textarea>
+            </div>
+
+            <div class="grade-2">
+                <div class="campo" th:classappend="${#fields.hasErrors('atestadoDias')} ? 'invalido'">
+                    <label for="con-atestado">Atestado (dias)</label>
+                    <input type="number" min="0" id="con-atestado" th:field="*{atestadoDias}">
+                    <div class="erro-campo" th:if="${#fields.hasErrors('atestadoDias')}" th:errors="*{atestadoDias}"></div>
+                </div>
+                <div class="campo">
+                    <label for="con-valor">Valor (R$)</label>
+                    <input type="number" step="0.01" min="0" id="con-valor" th:field="*{valor}">
+                </div>
+            </div>
+
+            <div class="campo">
+                <label for="con-recomendacao">Recomendacao</label>
+                <input type="text" id="con-recomendacao" th:field="*{recomendacao}">
+            </div>
+
+            <div class="campo">
+                <label for="con-risco">Risco de suicidio</label>
+                <input type="text" id="con-risco" th:field="*{riscoSuicidio}">
+            </div>
+
+            <div class="campo">
+                <label for="con-retorno">Retornar em</label>
+                <input type="text" id="con-retorno" th:field="*{retornarEm}" placeholder="ex.: 30 dias">
+            </div>
+        </fieldset>
+
+        <div class="botoes">
+            <button type="submit">Salvar</button>
+            <a class="botao secundario" th:href="@{/pacientes/{id}/historico(id=${paciente.id})}">Cancelar</a>
+        </div>
+    </form>
+</main>
+</body>
+</html>
